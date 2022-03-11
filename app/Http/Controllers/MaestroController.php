@@ -14,7 +14,7 @@ class MaestroController extends Controller
      */
     public function index()
     {
-        //
+        return Maestro::get();
     }
 
     /**
@@ -25,7 +25,9 @@ class MaestroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $maeastro = new Maestro;
+        $maeastro->created($request->all());
+        
     }
 
     /**
@@ -37,7 +39,8 @@ class MaestroController extends Controller
     public function show(Maestro $maestro)
     {
         //
-        return $maestro;
+        
+
     }
 
     /**

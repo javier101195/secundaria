@@ -13,6 +13,6 @@ class Materia extends Model
         'nombre',
         'semestre',
         'creditos',
-        'mestro_id'
+        'maestro_id'
     ];
 }

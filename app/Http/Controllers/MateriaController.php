@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Materia;
 use Illuminate\Http\Request;
+use App\Models\Maestro;
 
 class MateriaController extends Controller
 {
@@ -14,7 +15,14 @@ class MateriaController extends Controller
      */
     public function index()
     {
-        //
+        return $materia = Materia::get();
+        return $maestros = Maestro::get();
+        return (compact('materia','maestros'));
+
+        //return Materia::get();
+        //return Materia::get(), Maestro::get();
+        
+
     }
 
     /**
@@ -25,7 +33,20 @@ class MateriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        //dd ($request->all());
+
+        $materia = Materia::create($request->all());
+
+
+        //dd($materia);
+        /* $materia = new Materia;
+        dd($request->all());
+        $materia->create($request->all());
+
+        $materia->save();
+        dd($materia); */
+        
     }
 
     /**
@@ -36,7 +57,7 @@ class MateriaController extends Controller
      */
     public function show(Materia $materia)
     {
-        //
+        return $materia;
     }
 
     /**
@@ -48,7 +69,7 @@ class MateriaController extends Controller
      */
     public function update(Request $request, Materia $materia)
     {
-        //
+        $materia->update($request->all());
     }
 
     /**
