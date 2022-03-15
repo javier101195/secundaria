@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Carga_Academica;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Materia;
+use Illuminate\Support\Arr;
 
 class CargaAcademicaController extends Controller
 {
@@ -14,8 +18,75 @@ class CargaAcademicaController extends Controller
      */
     public function index()
     {
-        //
+        $usuarios = DB::table('users')
+        ->select('users.id','users.name')
+        ->get();
+
+        $h = DB::table('carga_academica')
+        ->join('users', 'carga_academica.user_id', '=', 'users.id')
+        ->join('materias', 'carga_academica.materia_id', '=', 'materias.id')
+        ->select('users.id as AlumnoId','users.name as NombreAlumno','materias.nombre as NombreMateria', 'materias.creditos')
+        ->get();
+
+        return view('carga_academica', compact('usuarios',"h"));
+
     }
+
+    public function consul(Request $request, $id){
+
+        $name_alu=DB::table('users')      
+        ->where('users.id','=',$id)
+        ->pluck('users.name'); 
+
+        $total_mat= DB::table('carga_academica as ca')
+        ->join('users as us', 'ca.user_id', '=', 'us.id')
+        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
+        ->select('us.id as AlumnoId','us.name as NombreAlumno',
+        'ca.user_id','ca.materia_id','mat.id as MateriaId','mat.nombre as NombreMateria', 'mat.creditos')           
+        ->where('ca.user_id','=', $id)
+        ->count('ca.materia_id');
+        
+
+        $tot_cre=DB::table('carga_academica as ca')
+        ->join('users as us', 'ca.user_id', '=', 'us.id')
+        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
+        ->where('ca.user_id','=', $id)
+        ->sum('mat.creditos');
+
+        /* $total_car= DB::table('carga_academica as ca')
+        ->join('users as us', 'ca.user_id', '=', 'us.id')
+        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
+        ->select('mat.nombre as NombreMateria')           
+        ->where('ca.user_id','=', $id)
+        ->get(); */
+        $array = ['nombre' => $name_alu, 'materias' => $total_mat, 
+        'creditos' =>  $tot_cre];
+ 
+        $datos= Arr::flatten($array);
+        return ($datos);
+        //dd($flattened);
+
+    }
+
+    public function listaMaterias (Request $request, $id){
+
+        return DB::table('carga_academica as ca')
+        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
+        ->select('mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
+        ->where('ca.user_id','=', $id)
+        ->get();
+    }
+
+    public function listaMateriasNo (Request $request, $id){
+
+        return $no_cargadas = DB ::table('materias as mat')
+        ->leftJoin('carga_academica as ca', 'mat.id', '=', 'ca.materia_id')
+        ->select('mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
+        ->where('ca.user_id','=', null)
+        ->orwhere('ca.user_id','!=', $id)
+        ->get();
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -25,7 +96,7 @@ class CargaAcademicaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $materia = Carga_Academica::create($request->all());
     }
 
     /**
@@ -36,7 +107,7 @@ class CargaAcademicaController extends Controller
      */
     public function show(Carga_Academica $carga_Academica)
     {
-        //
+        return $carga_Academica;
     }
 
     /**
@@ -48,7 +119,7 @@ class CargaAcademicaController extends Controller
      */
     public function update(Request $request, Carga_Academica $carga_Academica)
     {
-        //
+        $carga_Academica->update($request->all());
     }
 
     /**

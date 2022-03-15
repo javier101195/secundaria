@@ -51,18 +51,21 @@
         <form>
             <div class="form-group my-4">
                 <label for="m">Selecciona un maestro</label>
-                <select v-model="maestroSelec" class="form-control" id="m" >
+                <select v-model="maestroSelec.seleccionado" class="form-control" id="m" @change="get_sectores">
                     <option v-for="m in maestros" :key="m.id" :value="m.id">{{m.nombre}}</option>
                 </select>
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
                 <h2>Docente seleccionado:</h2>
-                {{maestroSelec}}
-            </div>
+                {{maestroSelec.seleccionado}}
+                <button @click="filtrar" class="btn btn-primary">Buscar</button>
+
+            </div> -->
+            
 
         </form>       
 
-        <table class="table table-borderless align-middle">
+        <table class="table table-borderless align-middle" id="materi">
             <thead class="table-dark ">
                 <tr>
                   <!-- <th scope="col">#</th> -->
@@ -73,12 +76,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="mtr in materias" :key="mtr.id" for="maestro">
+                <tr v-for="mtr in m" :key="mtr.id" for="maestro">
                     <!-- <th scope="row">{{mtr.id}}</th> -->
-                    <td>{{mtr.nombre}}</td>
+                    <td>{{mtr.MatNombre}}</td>
                     <td>{{mtr.semestre}}</td> 
                     <td>{{mtr.creditos}}</td>
-                    <td id="maestro">{{maestros[mtr.maestro_id-1].nombre}}</td>
+                    <td>{{mtr.MaesNombre}}</td>
                 </tr>
             </tbody>
         </table>        
@@ -89,6 +92,10 @@
 
 
 export default {
+    props: ['mat',
+    'maes_select'],
+    
+    
     data() {
         return{
             materia:{
@@ -97,16 +104,24 @@ export default {
                 creditos:'',
                 maestro_id:'',                
             },
-                        
+
+            maestroSelec: {
+                seleccionado:'',
+
+            },
+            m:'',                        
             modal:0,
             tituloModal:'Registra una materia',
-            maestroSelec: {},
+            
             materias:[],
-            maestros:[], // <-- La lista de docentes
+            maestros:[], 
             
 
         }
     },
+
+
+
     methods:{
         async listar(){
             const res=await axios.get('materias')
@@ -117,6 +132,19 @@ export default {
             this.maestros=resultado.data;
         },
 
+        get_sectores: async function(){
+                try{
+                    let response = await axios.get('consulta/'+this.maestroSelec.seleccionado);
+                    //alert(response.data);
+                    this.m=response.data;
+                    
+
+                    console.log(m);
+                }catch(error){
+
+                }
+            },
+
         /* abrirModal(){
         this.modal=1;
         },
@@ -125,31 +153,24 @@ export default {
         this.modal=0;
         }, */
 
-        /* eliminar(id){
-            const res=await axios.delete('/materias/'+id);
-            this.listar();            
-        }, */
-
         async guardar(){
-            const res3=await axios.post('/materias', this.materia);
-            //alert("hola");
-            
-            this.listar();            
-        },     
+            const res3=await axios.post('/materias', this.materia);          
+        }, 
     },
+
     created(){
         this.listar();
         this.listar2();
-    },        
+        console.log(this.mat);
+        console.log(this.maes_select);
+        //console.log(this.maes_select);
+    },
+    
+    
 }
 
 
 </script>
 <style>
-.mostrar{
-    display: list-item;
-    opacity: 1;
-    background: rgb(44, 38, 75, 0.849);
-}
 
 </style>

@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\CargaAcademicaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\MaestroController;
+use App\Http\Controllers\UserController;
+use App\Models\Carga_Academica;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +19,22 @@ use App\Http\Controllers\MaestroController;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/consulta/{id}', [App\Http\Controllers\HomeController::class, 'consulta'])->name('consulta');
+Route::get('/consul/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'consul'])->name('consul');
+Route::get('/listaMaterias/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'listaMaterias'])->name('listaMaterias');
+Route::get('/listaMateriasNo/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'listaMateriasNo'])->name('listaMateriasNo');
+Route::get('/carga_academica', [App\Http\Controllers\CargaAcademicaController::class, 'index'])->name('carga_academica');
 
-Route::ApiResource('maestros', MaestroController::class);
-Route::ApiResource('materias', MateriaController::class);
+Route::ApiResource('maestros', MaestroController::class)->middleware('auth');
+Route::ApiResource('materias', MateriaController::class)->middleware('auth');
+Route::ApiResource('users', UserController::class)->middleware('auth');
+//Route::ApiResource('carga_academica',CargaAcademicaController::class)->middleware('auth');
+//Route::ApiResource('carga_academica', CargaAcademicaController::class)->middleware('auth');
+
+

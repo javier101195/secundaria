@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Materia;
 use Illuminate\Http\Request;
 use App\Models\Maestro;
+use Illuminate\Support\Facades\DB;
+use Psy\Command\WhereamiCommand;
 
 class MateriaController extends Controller
 {
@@ -15,13 +17,35 @@ class MateriaController extends Controller
      */
     public function index()
     {
-        return $materia = Materia::get();
-        return $maestros = Maestro::get();
-        return (compact('materia','maestros'));
 
-        //return Materia::get();
-        //return Materia::get(), Maestro::get();
+        /* $materias = DB::table('materias')->get();*/
         
+        /* return DB::table('materias')
+        ->join ('maestros', 'materias.maestro_id', '=', 'maestros.id')
+        ->select('materias.nombre as MatNombre','materias.semestre','materias.creditos',
+        'materias.maestro_id','maestros.id as MaesId','maestros.nombre as MaesNombre')
+        ->get(); */
+
+
+        /* return (compact("mat"));  */
+        //return DB::table('materias')->get();
+        
+        /* return DB::table('materias')
+        ->join ('maestros', 'materias.maestro_id', '=', 'maestros.id')
+        ->select('materias.nombre as MatNombre','materias.semestre','materias.creditos',
+        'materias.maestro_id','maestros.id as MaesId','maestros.nombre as MaesNombre')
+        ->get(); */
+        
+
+        /* return DB::table('materias')
+        ->join ('maestros', 'materias.maestro_id', '=', 'maestros.id')
+        ->select('materias.nombre as MatNombre','materias.semestre','materias.creditos',
+        'materias.maestro_id','maestros.id as MaesId','maestros.nombre as MaesNombre')
+        ->where('materias.maestro_id','=',compact('id'))
+        ->get(); */
+        //return (compact('id'));
+
+
 
     }
 
@@ -34,20 +58,14 @@ class MateriaController extends Controller
     public function store(Request $request)
     {
 
-        //dd ($request->all());
 
         $materia = Materia::create($request->all());
 
-
-        //dd($materia);
-        /* $materia = new Materia;
-        dd($request->all());
-        $materia->create($request->all());
-
         $materia->save();
-        dd($materia); */
+        
         
     }
+
 
     /**
      * Display the specified resource.

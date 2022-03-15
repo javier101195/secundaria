@@ -21,6 +21,7 @@ window.Vue = require('vue').default;
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('materias', require('./components/MateriasComponent.vue').default);
+Vue.component('alumnos', require('./components/AlumnosComponent.vue').default);
 
 
 

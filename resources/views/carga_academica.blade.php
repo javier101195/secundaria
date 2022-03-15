@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    {{-- <materias/> --}}
-    <materias :mat="{{ $mat }}"  ></materias>
+    {{-- <alumnos/> --}}
+    <alumnos :h="{{ $h }}" :usuarios="{{ $usuarios }}"></alumnos>
     
 </div>
 @endsection
