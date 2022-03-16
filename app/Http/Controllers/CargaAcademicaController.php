@@ -44,8 +44,7 @@ class CargaAcademicaController extends Controller
         ->select('us.id as AlumnoId','us.name as NombreAlumno',
         'ca.user_id','ca.materia_id','mat.id as MateriaId','mat.nombre as NombreMateria', 'mat.creditos')           
         ->where('ca.user_id','=', $id)
-        ->count('ca.materia_id');
-        
+        ->count('ca.materia_id');        
 
         $tot_cre=DB::table('carga_academica as ca')
         ->join('users as us', 'ca.user_id', '=', 'us.id')
@@ -53,12 +52,6 @@ class CargaAcademicaController extends Controller
         ->where('ca.user_id','=', $id)
         ->sum('mat.creditos');
 
-        /* $total_car= DB::table('carga_academica as ca')
-        ->join('users as us', 'ca.user_id', '=', 'us.id')
-        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
-        ->select('mat.nombre as NombreMateria')           
-        ->where('ca.user_id','=', $id)
-        ->get(); */
         $array = ['nombre' => $name_alu, 'materias' => $total_mat, 
         'creditos' =>  $tot_cre];
  
@@ -72,14 +65,14 @@ class CargaAcademicaController extends Controller
 
         return DB::table('carga_academica as ca')
         ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
-        ->select('mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
+        ->select('ca.id as ca_id','mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
         ->where('ca.user_id','=', $id)
         ->get();
     }
 
     public function listaMateriasNo (Request $request, $id){
 
-        return $no_cargadas = DB ::table('materias as mat')
+        return DB ::table('materias as mat')
         ->leftJoin('carga_academica as ca', 'mat.id', '=', 'ca.materia_id')
         ->select('mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
         ->where('ca.user_id','=', null)
@@ -96,7 +89,9 @@ class CargaAcademicaController extends Controller
      */
     public function store(Request $request)
     {
-        $materia = Carga_Academica::create($request->all());
+        $carga = Carga_Academica::create($request->all());
+
+        $carga->save();
     }
 
     /**
@@ -128,8 +123,10 @@ class CargaAcademicaController extends Controller
      * @param  \App\Models\Carga_Academica  $carga_Academica
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Carga_Academica $carga_Academica)
-    {
-        //
+    public function destroy(Carga_Academica $carga_Academica,$id)
+    {    
+        $m = Carga_Academica::find($id);
+        $m->delete();
+       
     }
 }

@@ -30,6 +30,8 @@ Route::get('/consul/{id}', [App\Http\Controllers\CargaAcademicaController::class
 Route::get('/listaMaterias/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'listaMaterias'])->name('listaMaterias');
 Route::get('/listaMateriasNo/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'listaMateriasNo'])->name('listaMateriasNo');
 Route::get('/carga_academica', [App\Http\Controllers\CargaAcademicaController::class, 'index'])->name('carga_academica');
+Route::delete('/carga_academica/{id}', [App\Http\Controllers\CargaAcademicaController::class, 'destroy']);
+//Route::POST('carga_academica/', [App\Http\Controllers\CargaAcademicaController::class, 'store']);
 
 Route::ApiResource('maestros', MaestroController::class)->middleware('auth');
 Route::ApiResource('materias', MateriaController::class)->middleware('auth');

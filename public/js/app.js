@@ -5473,7 +5473,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   props: ['h', 'usuarios'],
   data: function data() {
     return {
+      carga: {
+        user_id: '',
+        materia_id: ''
+      },
       alumSelec: {
+        seleccionado: ''
+      },
+      materiaSelec: {
         seleccionado: ''
       },
       m: '',
@@ -5483,29 +5490,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    get_sectores: function () {
-      var _get_sectores = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var response, responseMat, responseMatNo;
+    checkFluency: function checkFluency(id) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
+                if (!(id != null)) {
+                  _context.next = 4;
+                  break;
+                }
+
                 _context.next = 3;
+                return axios["delete"]('/carga_academica/' + id);
+
+              case 3:
+                res = _context.sent;
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    get_sectores: function () {
+      var _get_sectores = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var response, responseMat, responseMatNo;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
                 return axios.get('consul/' + this.alumSelec.seleccionado);
 
               case 3:
-                response = _context.sent;
-                _context.next = 6;
+                response = _context2.sent;
+                _context2.next = 6;
                 return axios.get('listaMaterias/' + this.alumSelec.seleccionado);
 
               case 6:
-                responseMat = _context.sent;
-                _context.next = 9;
+                responseMat = _context2.sent;
+                _context2.next = 9;
                 return axios.get('listaMateriasNo/' + this.alumSelec.seleccionado);
 
               case 9:
-                responseMatNo = _context.sent;
+                responseMatNo = _context2.sent;
                 this.m = response.data;
                 this.lista = responseMat.data;
                 this.listaN = responseMatNo.data; //alert(this.lista);
@@ -5513,19 +5546,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log(m);
                 console.log(lista);
                 console.log(listaN);
-                _context.next = 20;
+                _context2.next = 20;
                 break;
 
               case 18:
-                _context.prev = 18;
-                _context.t0 = _context["catch"](0);
+                _context2.prev = 18;
+                _context2.t0 = _context2["catch"](0);
 
               case 20:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this, [[0, 18]]);
+        }, _callee2, this, [[0, 18]]);
       }));
 
       function get_sectores() {
@@ -5562,15 +5595,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5734,7 +5758,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context3.sent;
-                //alert(response.data);
                 this.m = response.data;
                 console.log(m);
                 _context3.next = 10;
@@ -5758,13 +5781,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return get_sectores;
     }(),
-
-    /* abrirModal(){
-    this.modal=1;
-    },
-      cerrarModal(){
-    this.modal=0;
-    }, */
     guardar: function guardar() {
       var _this3 = this;
 
@@ -29251,7 +29267,7 @@ var render = function () {
     _vm._v(" "),
     _c("form", [
       _c("div", { staticClass: "form-group my-4" }, [
-        _c("label", { attrs: { for: "m" } }, [_vm._v("Selecciona un maestro")]),
+        _c("label", { attrs: { for: "m" } }, [_vm._v("Selecciona un alumno")]),
         _vm._v(" "),
         _c(
           "select",
@@ -29354,16 +29370,6 @@ var render = function () {
                             "div",
                             { key: mtr.id, staticClass: "form-check" },
                             [
-                              _c("input", {
-                                staticClass: "form-check-input",
-                                attrs: {
-                                  type: "checkbox",
-                                  value: "",
-                                  id: "flexCheckChecked",
-                                  checked: "",
-                                },
-                              }),
-                              _vm._v(" "),
                               _c(
                                 "label",
                                 {
@@ -29374,7 +29380,9 @@ var render = function () {
                                   _vm._v(
                                     "\n                                    " +
                                       _vm._s(mtr.mat_nombre) +
-                                      "\n                                    "
+                                      "," +
+                                      _vm._s(mtr.id) +
+                                      "                                        \n                                    "
                                   ),
                                   _c("div", [
                                     _vm._v(
@@ -29385,6 +29393,21 @@ var render = function () {
                                   ]),
                                 ]
                               ),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-check-input",
+                                attrs: {
+                                  type: "checkbox",
+                                  value: "mtr.ca_id",
+                                  id: "flexCheckChecked",
+                                  checked: "",
+                                },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.checkFluency(mtr.ca_id)
+                                  },
+                                },
+                              }),
                             ]
                           )
                         }),
@@ -29399,15 +29422,6 @@ var render = function () {
                             "div",
                             { key: mtr.id, staticClass: "form-check" },
                             [
-                              _c("input", {
-                                staticClass: "form-check-input",
-                                attrs: {
-                                  type: "checkbox",
-                                  value: "",
-                                  id: "flexCheckDefault",
-                                },
-                              }),
-                              _vm._v(" "),
                               _c(
                                 "label",
                                 {
@@ -29418,6 +29432,8 @@ var render = function () {
                                   _vm._v(
                                     "\n                                    " +
                                       _vm._s(mtr.mat_nombre) +
+                                      "," +
+                                      _vm._s(mtr.id) +
                                       "\n                                    "
                                   ),
                                   _c("div", [
@@ -29429,6 +29445,15 @@ var render = function () {
                                   ]),
                                 ]
                               ),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-check-input",
+                                attrs: {
+                                  type: "checkbox",
+                                  value: "",
+                                  id: "flexCheckDefault",
+                                },
+                              }),
                             ]
                           )
                         }),
@@ -29454,7 +29479,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "table-dark " }, [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Alumns")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Alumnos")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("# Materias")]),
         _vm._v(" "),

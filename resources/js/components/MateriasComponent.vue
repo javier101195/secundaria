@@ -55,20 +55,12 @@
                     <option v-for="m in maestros" :key="m.id" :value="m.id">{{m.nombre}}</option>
                 </select>
             </div>
-            <!-- <div class="col-6">
-                <h2>Docente seleccionado:</h2>
-                {{maestroSelec.seleccionado}}
-                <button @click="filtrar" class="btn btn-primary">Buscar</button>
-
-            </div> -->
-            
 
         </form>       
 
         <table class="table table-borderless align-middle" id="materi">
             <thead class="table-dark ">
                 <tr>
-                  <!-- <th scope="col">#</th> -->
                   <th scope="col">Materia</th>
                   <th scope="col">Semestre</th>
                   <th scope="col">Creditos</th>
@@ -77,7 +69,6 @@
             </thead>
             <tbody>
                 <tr v-for="mtr in m" :key="mtr.id" for="maestro">
-                    <!-- <th scope="row">{{mtr.id}}</th> -->
                     <td>{{mtr.MatNombre}}</td>
                     <td>{{mtr.semestre}}</td> 
                     <td>{{mtr.creditos}}</td>
@@ -135,7 +126,6 @@ export default {
         get_sectores: async function(){
                 try{
                     let response = await axios.get('consulta/'+this.maestroSelec.seleccionado);
-                    //alert(response.data);
                     this.m=response.data;
                     
 
@@ -144,14 +134,6 @@ export default {
 
                 }
             },
-
-        /* abrirModal(){
-        this.modal=1;
-        },
-
-        cerrarModal(){
-        this.modal=0;
-        }, */
 
         async guardar(){
             const res3=await axios.post('/materias', this.materia);          

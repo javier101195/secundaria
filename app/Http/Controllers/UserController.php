@@ -36,7 +36,7 @@ class UserController extends Controller
         ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
         ->where('ca.user_id','=', '1')
         ->sum('mat.creditos'); */
-        $cargadas = DB::table('carga_academica as ca')
+        /* $cargadas = DB::table('carga_academica as ca')
         ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
         ->select('mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
         ->where('ca.user_id','=', 1)
@@ -49,7 +49,13 @@ class UserController extends Controller
         ->orwhere('ca.user_id','!=', 1)
         ->get();
         
-        return(compact('cargadas', 'no_cargadas'));
+        return(compact('cargadas', 'no_cargadas')); */
+
+        return DB::table('carga_academica as ca')
+        ->join('materias as mat', 'ca.materia_id', '=', 'mat.id')
+        ->select('ca.id as ca_id','mat.id','mat.nombre as mat_nombre','ca.materia_id','mat.creditos')
+        ->where('ca.user_id','=', 1)
+        ->get();
 
         //return $array = Arr::collapse(['name' => $name]);
         /* $array = ['cargadas' => $no_cargadas];
